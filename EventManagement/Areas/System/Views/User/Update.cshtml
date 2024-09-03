@@ -1,0 +1,85 @@
+﻿@model EventManagement.Areas.Admin.ViewModels.UserViewModel
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "_HomeLayout";
+}
+
+<style>
+    .Finallyfooter {
+        position: absolute;
+        bottom: 0;
+    }
+
+    label {
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
+
+<h1 style="margin-top:15px;padding:20px">Update Info</h1>
+<hr />
+<div class="row"style="padding:20px">
+    <div class="col-md-4">
+        <form id="update-info-form" asp-action="SaveUpdate" asp-area="System" asp-controller="User" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" value="@Model.UserName" readonly class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" value="@Model.Email" readonly class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" value="@Model.Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" value="@Model.Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <a asp-action="Index" asp-controller="Category" asp-area="System" class="btn btn-primary mr-5">Home</a>
+                <a asp-action="ChangePassword" asp-controller="User" asp-area="System" class="btn btn-primary">Change Password</a>
+                <input type="button" value="Save Update" class="btn btn-primary" onclick="submitForm()" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function submitForm() {
+            var form = $("#update-info-form");
+
+            $.ajax({
+                type: 'POST', // Ensure this is 'POST'
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Your Information updated successfully!',
+                    });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Failed to update, please try again later!',
+                    });
+                }
+            });
+        }
+    </script>
+}
